@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/app/components/shared/Navbar';
-import { useAuth } from '@/app/context/AuthContext';
+import { useAppSelector } from '@/app/store/hooks';
 
 export default function SettingsLayout({
   children,
@@ -11,7 +11,8 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { user, isLoading } = useAuth();
+  const user = useAppSelector((state) => state.auth.user);
+  const isLoading = useAppSelector((state) => state.auth.isLoading);
 
   useEffect(() => {
     if (!isLoading && !user) {

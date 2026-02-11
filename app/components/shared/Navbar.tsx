@@ -5,12 +5,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Home, User, Settings, LogOut } from 'lucide-react';
 import { Avatar } from './Avatar';
 import { ThemeToggle } from './ThemeToggle';
-import { useAuth } from '@/app/context/AuthContext';
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
+import { logout as logoutAction } from '@/app/store/slices/authSlice';
 
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
 
   const navLinks = [
     { href: '/feed', label: 'Feed', icon: Home },
@@ -19,7 +21,7 @@ export function Navbar() {
   ];
 
   const handleLogout = () => {
-    logout();
+    dispatch(logoutAction());
     router.push('/login');
   };
 

@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/app/components/shared/Input';
 import { Button } from '@/app/components/shared/Button';
-import { useAuth } from '@/app/context/AuthContext';
+import { useAppDispatch } from '@/app/store/hooks';
+import { signup as signupAction } from '@/app/store/slices/authSlice';
 
 export function SignupForm() {
   const router = useRouter();
-  const { signup } = useAuth();
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -37,12 +38,12 @@ export function SignupForm() {
     setIsLoading(true);
 
     try {
-      await signup({
+      await dispatch(signupAction({
         email: formData.email,
         username: formData.username,
         displayName: formData.displayName,
         password: formData.password
-      });
+      })).unwrap();
       router.push('/feed');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Signup failed');

@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/app/components/shared/Input';
 import { Button } from '@/app/components/shared/Button';
-import { useAuth } from '@/app/context/AuthContext';
+import { useAppDispatch } from '@/app/store/hooks';
+import { login as loginAction } from '@/app/store/slices/authSlice';
 
 export function LoginForm() {
   const router = useRouter();
-  const { login } = useAuth();
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +22,7 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      await dispatch(loginAction({ email, password })).unwrap();
       router.push('/feed');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');

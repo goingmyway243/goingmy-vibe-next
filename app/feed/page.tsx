@@ -2,7 +2,7 @@
 
 import { CreatePost } from '@/app/components/feed/CreatePost';
 import { PostCard } from '@/app/components/feed/PostCard';
-import { useAuth } from '@/app/context/AuthContext';
+import { useAppSelector } from '@/app/store/hooks';
 
 // Mock data for demonstration
 const mockPosts = [
@@ -48,7 +48,7 @@ const mockPosts = [
 ];
 
 export default function FeedPage() {
-  const { user } = useAuth();
+  const user = useAppSelector((state) => state.auth.user);
 
   if (!user) return null;
 

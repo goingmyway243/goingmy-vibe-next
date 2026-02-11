@@ -1,11 +1,13 @@
 'use client';
 
 import { Sun, Moon, Monitor } from 'lucide-react';
-import { useTheme } from '@/app/context/ThemeContext';
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
+import { setTheme as setThemeAction } from '@/app/store/slices/themeSlice';
 import { useState, useRef, useEffect } from 'react';
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const dispatch = useAppDispatch();
+  const theme = useAppSelector((state) => state.theme.theme);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +56,7 @@ export function ThemeToggle() {
               <button
                 key={value}
                 onClick={() => {
-                  setTheme(value);
+                  dispatch(setThemeAction(value));
                   setIsOpen(false);
                 }}
                 className={`w-full px-4 py-2.5 text-left flex items-center gap-3 transition-all duration-150 ${
