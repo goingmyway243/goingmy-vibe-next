@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { Input } from '@/app/components/shared/Input';
 import { Button } from '@/app/components/shared/Button';
 import { Avatar } from '@/app/components/shared/Avatar';
-import { useAuth } from '@/app/context/AuthContext';
+import { useAppSelector } from '../store/hooks';
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const user = useAppSelector((state) => state.auth.user);
   const [formData, setFormData] = useState({
     displayName: '',
     username: '',

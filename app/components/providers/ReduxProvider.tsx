@@ -9,6 +9,7 @@ import { initializeTheme, setResolvedTheme } from '@/app/store/slices/themeSlice
 export function ReduxProvider({ children }: { children: React.ReactNode }) {
   const storeRef = useRef(store);
   const initialized = useRef(false);
+  const previousTheme = useRef<'light' | 'dark' | 'system'>('system');
 
   useEffect(() => {
     if (!initialized.current) {
@@ -51,9 +52,16 @@ export function ReduxProvider({ children }: { children: React.ReactNode }) {
 
     mediaQuery.addEventListener('change', handleChange);
 
-    // Subscribe to theme changes in store
+    // Subscribe to theme changes in store - only update if theme preference changed
     const unsubscribe = storeRef.current.subscribe(() => {
-      updateResolvedTheme();
+      const state = storeRef.current.getState();
+      const currentTheme = state.theme.theme;
+      
+      // Only update if the theme preference (not resolvedTheme) changed
+      if (currentTheme !== previousTheme.current) {
+        previousTheme.current = currentTheme;
+        updateResolvedTheme();
+      }
     });
 
     return () => {
